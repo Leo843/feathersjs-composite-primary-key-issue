@@ -1,0 +1,4 @@
+{
+  "host": "app",
+  "postgres": "postgres://mydbuser:mydbpwd@postgres:5432/mydb"
+}

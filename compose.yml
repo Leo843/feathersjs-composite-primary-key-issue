@@ -1,0 +1,37 @@
+services:
+
+  postgres:
+    build: compose/postgres
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    expose:
+      - 5432
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    depends_on:
+      postgres:
+        condition: service_healthy
+    build: .
+    environment:
+      - NODE_ENV=compose
+    expose:
+      - 3030
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:3030/my-service"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  test-runner:
+    depends_on:
+      app:
+        condition: service_healthy
+    build: .
+    environment:
+      - NODE_ENV=compose
+    command: npm run jest
