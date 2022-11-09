@@ -21,6 +21,7 @@ module.exports = function (app) {
     hooks: {
       beforeCount (options) {
         options.raw = true
+        options.distinct = false
       }
     }
   })
